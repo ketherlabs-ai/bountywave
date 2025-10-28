@@ -1,4 +1,4 @@
-import { ArrowRight, Trophy, Users, Zap, Check, Globe, Sparkles, Code, Wallet, Shield, TrendingUp, Star, DollarSign, MapPin, CheckCircle, Play, ExternalLink } from 'lucide-react';
+import { ArrowRight, Trophy, Users, Zap, Check, Globe, Sparkles, Code, Wallet, Shield, TrendingUp, Star, DollarSign, MapPin, CheckCircle, Play, ExternalLink, Clock, Flame, Award, Target } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
@@ -26,16 +26,44 @@ export function Landing({ onNavigate }: LandingProps) {
   const [animatedStats, setAnimatedStats] = useState({ rewards: 0, bounties: 0, countries: 0 });
   const [liveActivities, setLiveActivities] = useState<LiveActivity[]>([]);
   const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState({ hours: 23, minutes: 45, seconds: 30 });
+  const [userLevel, setUserLevel] = useState({ level: 5, xp: 2450, nextLevelXp: 3000, streak: 7 });
 
   useEffect(() => {
     loadStats();
     generateLiveActivities();
 
-    const interval = setInterval(() => {
+    const activityInterval = setInterval(() => {
       setCurrentActivityIndex(prev => (prev + 1) % 5);
     }, 4000);
 
-    return () => clearInterval(interval);
+    const countdownInterval = setInterval(() => {
+      setTimeRemaining(prev => {
+        let { hours, minutes, seconds } = prev;
+
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else {
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        }
+
+        return { hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(activityInterval);
+      clearInterval(countdownInterval);
+    };
   }, []);
 
   useEffect(() => {
@@ -222,6 +250,185 @@ export function Landing({ onNavigate }: LandingProps) {
                 </div>
               </div>
               <div className="text-sm text-neutral-400 font-medium">Países Activos</div>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 rounded-3xl p-8 border-2 border-orange-500/50 relative overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20"></div>
+
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center animate-pulse">
+                    <Flame className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <div className="text-orange-300 text-sm font-bold uppercase tracking-wider">Reto del Día</div>
+                    <div className="text-white text-xs">Termina en:</div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  <div className="bg-neutral-950/50 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
+                    <div className="text-4xl font-bold text-white text-center mb-1">
+                      {String(timeRemaining.hours).padStart(2, '0')}
+                    </div>
+                    <div className="text-xs text-orange-300 text-center font-semibold">HORAS</div>
+                  </div>
+                  <div className="bg-neutral-950/50 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
+                    <div className="text-4xl font-bold text-white text-center mb-1">
+                      {String(timeRemaining.minutes).padStart(2, '0')}
+                    </div>
+                    <div className="text-xs text-orange-300 text-center font-semibold">MINUTOS</div>
+                  </div>
+                  <div className="bg-neutral-950/50 backdrop-blur-sm rounded-xl p-4 border border-orange-500/30">
+                    <div className="text-4xl font-bold text-white text-center mb-1">
+                      {String(timeRemaining.seconds).padStart(2, '0')}
+                    </div>
+                    <div className="text-xs text-orange-300 text-center font-semibold">SEGUNDOS</div>
+                  </div>
+                </div>
+
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  Crear sistema de votación descentralizado
+                </h3>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-lg border border-orange-500/40 font-semibold">
+                    React
+                  </span>
+                  <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-lg border border-orange-500/40 font-semibold">
+                    Solidity
+                  </span>
+                  <span className="px-3 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-lg border border-orange-500/40 font-semibold">
+                    Web3
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 mb-1">
+                      <DollarSign className="w-4 h-4 text-emerald-400" />
+                      <div className="text-2xl font-bold text-emerald-400">$850</div>
+                    </div>
+                    <div className="text-xs text-gray-400">Premio</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 mb-1">
+                      <Target className="w-4 h-4 text-yellow-400" />
+                      <div className="text-2xl font-bold text-yellow-400">Hard</div>
+                    </div>
+                    <div className="text-xs text-gray-400">Dificultad</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 mb-1">
+                      <Users className="w-4 h-4 text-primary-400" />
+                      <div className="text-2xl font-bold text-primary-400">28</div>
+                    </div>
+                    <div className="text-xs text-gray-400">Compitiendo</div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => onNavigate('explorer')}
+                  className="w-full px-6 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold text-lg hover:from-orange-400 hover:to-red-400 transition-all hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                >
+                  Participar Ahora
+                  <ArrowRight size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-3xl p-8 border-2 border-purple-500/50 relative overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20"></div>
+
+              <div className="relative">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl flex items-center justify-center">
+                      <Trophy className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-purple-300 text-sm font-bold uppercase tracking-wider">Tu Nivel</div>
+                      <div className="text-white text-2xl font-bold">Nivel {userLevel.level}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 rounded-xl border border-orange-500/40">
+                    <Flame className="w-5 h-5 text-orange-400" />
+                    <div className="text-white font-bold">{userLevel.streak} días</div>
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-purple-300 font-semibold">Progreso al Nivel {userLevel.level + 1}</span>
+                    <span className="text-sm text-white font-bold">{userLevel.xp} / {userLevel.nextLevelXp} XP</span>
+                  </div>
+                  <div className="h-4 bg-neutral-950/50 rounded-full overflow-hidden border border-purple-500/30">
+                    <div
+                      className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-1000 relative overflow-hidden"
+                      style={{ width: `${(userLevel.xp / userLevel.nextLevelXp) * 100}%` }}
+                    >
+                      <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  <div className="bg-neutral-950/50 backdrop-blur-sm rounded-xl p-4 border border-purple-500/30">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Award className="w-5 h-5 text-yellow-400" />
+                      <span className="text-xs text-purple-300 font-semibold">BADGES</span>
+                    </div>
+                    <div className="text-2xl font-bold text-white">12</div>
+                  </div>
+                  <div className="bg-neutral-950/50 backdrop-blur-sm rounded-xl p-4 border border-purple-500/30">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Sparkles className="w-5 h-5 text-emerald-400" />
+                      <span className="text-xs text-purple-300 font-semibold">RETOS</span>
+                    </div>
+                    <div className="text-2xl font-bold text-white">38</div>
+                  </div>
+                </div>
+
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center justify-between p-3 bg-neutral-950/50 backdrop-blur-sm rounded-xl border border-purple-500/20">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <span className="text-sm text-white">Resolver bounty</span>
+                    </div>
+                    <span className="text-emerald-400 font-bold text-sm">+50 XP</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-neutral-950/50 backdrop-blur-sm rounded-xl border border-purple-500/20">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-primary-500/20 rounded-lg flex items-center justify-center">
+                        <Users className="w-5 h-5 text-primary-400" />
+                      </div>
+                      <span className="text-sm text-white">Votar en comunidad</span>
+                    </div>
+                    <span className="text-primary-400 font-bold text-sm">+10 XP</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-neutral-950/50 backdrop-blur-sm rounded-xl border border-purple-500/20">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-accent-500/20 rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-accent-400" />
+                      </div>
+                      <span className="text-sm text-white">Crear nuevo reto</span>
+                    </div>
+                    <span className="text-accent-400 font-bold text-sm">+25 XP</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => onNavigate('profile')}
+                  className="w-full px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold text-lg hover:from-purple-400 hover:to-pink-400 transition-all hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                >
+                  Ver Mi Perfil
+                  <ArrowRight size={20} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
