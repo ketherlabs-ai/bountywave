@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft, Brain, Coins, Clock, Cpu, Users, Layers, Server, Terminal, Lock, Code, Rocket, CheckCircle, AlertTriangle, ExternalLink, Upload, FileText, Award, TrendingUp } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { ToastContainer, ToastProps } from './Toast';
+import { useAuth } from '../contexts/AuthContext';
 
 interface EliteChallengeProps {
   onNavigate: (view: string) => void;
@@ -39,6 +40,7 @@ interface Participation {
 }
 
 export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps) {
+  const { userId, walletAddress } = useAuth();
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [techDetails, setTechDetails] = useState<TechDetails | null>(null);
   const [participation, setParticipation] = useState<Participation | null>(null);
@@ -59,10 +61,10 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   }, [challengeId]);
 
   useEffect(() => {
-    if (challenge) {
+    if (challenge && userId) {
       checkParticipation();
     }
-  }, [challenge]);
+  }, [challenge, userId]);
 
   useEffect(() => {
     if (challenge?.deadline) {
@@ -142,15 +144,12 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   };
 
   const checkParticipation = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    if (!challenge) return;
+    if (!userId || !challenge) return;
 
     const { data } = await supabase
       .from('elite_challenge_participants')
       .select('*')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('challenge_id', challenge.id)
       .maybeSingle();
 
@@ -173,41 +172,16 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   };
 
   const handleRegister = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || !challenge) {
+    if (!userId || !challenge) {
       showToast('error', 'Debes conectar tu wallet para participar en este Elite Challenge');
       return;
-    }
-
-    // Verificar si ya existe un perfil, si no, crearlo
-    const { data: existingProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    if (!existingProfile) {
-      // Crear perfil si no existe
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: user.id,
-          username: user.email?.split('@')[0] || 'user',
-          wallet_address: null
-        });
-
-      if (profileError) {
-        console.error('Error creating profile:', profileError);
-        showToast('error', 'Error al crear perfil. Por favor intenta de nuevo.');
-        return;
-      }
     }
 
     const { error } = await supabase
       .from('elite_challenge_participants')
       .insert({
         challenge_id: challenge.id,
-        user_id: user.id,
+        user_id: userId,
         status: 'registered'
       });
 
@@ -230,8 +204,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   };
 
   const handleSubmit = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user || !challenge) return;
+    if (!userId || !challenge) return;
 
     if (!submissionUrl || !submissionDescription) {
       showToast('error', 'Por favor completa todos los campos');
@@ -247,7 +220,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
         submission_date: new Date().toISOString()
       })
       .eq('challenge_id', challenge.id)
-      .eq('user_id', user.id);
+      .eq('user_id', userId);
 
     if (error) {
       console.error('Error submitting:', error);
