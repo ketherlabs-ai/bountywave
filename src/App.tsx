@@ -4,7 +4,7 @@ import { NotificationsProvider } from './contexts/NotificationsContext';
 import { Navbar } from './components/Navbar';
 import { Landing } from './components/Landing';
 import { Explorer } from './components/Explorer';
-import { CreateBounty } from './components/CreateBounty';
+import { CreateBountyWizard } from './components/CreateBountyWizard';
 import { BountyDetail } from './components/BountyDetail';
 import { Wallet } from './components/Wallet';
 import { Leaderboard } from './components/Leaderboard';
@@ -33,7 +33,7 @@ function AppContent() {
       case 'explorer':
         return <Explorer onNavigate={handleNavigate} />;
       case 'create':
-        return <CreateBounty onNavigate={handleNavigate} />;
+        return <CreateBountyWizard onNavigate={handleNavigate} />;
       case 'bounty':
         return <BountyDetail bountyId={viewData?.bountyId} onNavigate={handleNavigate} />;
       case 'wallet':
