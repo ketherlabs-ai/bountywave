@@ -97,7 +97,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // Creación de perfil corregida para Supabase v2
       const { data: existingProfile } = await supabase
         .from('profiles')
         .select('id')
@@ -109,15 +108,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (existingProfile) {
         profileId = existingProfile.id;
       } else {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-          throw new Error('No hay sesión de usuario en Supabase. Debes iniciar sesión antes de crear un perfil.');
-        }
+        const newUserId = crypto.randomUUID();
 
         const { error: insertError } = await supabase
           .from('profiles')
           .insert({
-            id: user.id, // UID Supabase v2
+            id: newUserId,
             wallet_address: address,
             username: `User_${address.slice(0, 6)}`,
           });
@@ -126,7 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error('Error creating profile:', insertError);
           throw new Error('Error al crear el perfil de usuario');
         }
-        profileId = user.id;
+        profileId = newUserId;
       }
 
       setWalletAddress(address);
