@@ -163,7 +163,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   const handleRegister = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !challenge) {
-      alert('Debes iniciar sesión para participar');
+      alert('Debes conectar tu wallet para participar en este Elite Challenge');
       onNavigate('home');
       return;
     }
