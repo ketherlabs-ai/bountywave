@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Brain, Coins, Clock, Cpu, Users, Layers, Server, Terminal, Lock, Code, Rocket, CheckCircle, AlertTriangle, ExternalLink, Upload, FileText, Award, TrendingUp } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { ToastContainer, ToastProps } from './Toast';
 
 interface EliteChallengeProps {
   onNavigate: (view: string) => void;
@@ -47,6 +48,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   const [submissionDescription, setSubmissionDescription] = useState('');
   const [loading, setLoading] = useState(true);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [toasts, setToasts] = useState<ToastProps[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -160,11 +162,20 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     }
   };
 
+  const showToast = (type: 'success' | 'error' | 'info', message: string) => {
+    const newToast: ToastProps = {
+      id: Date.now().toString(),
+      type,
+      message,
+      onClose: (id) => setToasts(prev => prev.filter(t => t.id !== id))
+    };
+    setToasts(prev => [...prev, newToast]);
+  };
+
   const handleRegister = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !challenge) {
-      alert('Debes conectar tu wallet para participar en este Elite Challenge');
-      onNavigate('home');
+      showToast('error', 'Debes conectar tu wallet para participar en este Elite Challenge');
       return;
     }
 
@@ -187,7 +198,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
 
       if (profileError) {
         console.error('Error creating profile:', profileError);
-        alert('Error al crear perfil. Por favor intenta de nuevo.');
+        showToast('error', 'Error al crear perfil. Por favor intenta de nuevo.');
         return;
       }
     }
@@ -203,16 +214,16 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     if (error) {
       console.error('Error registering:', error);
       if (error.code === '23505') {
-        alert('Ya estás registrado en este challenge.');
+        showToast('info', 'Ya estás registrado en este challenge.');
         setIsRegistered(true);
         await checkParticipation();
       } else {
-        alert('Error al registrarse: ' + error.message);
+        showToast('error', 'Error al registrarse: ' + error.message);
       }
     } else {
       setIsRegistered(true);
       setActiveTab('overview');
-      alert('¡Te has registrado exitosamente! Ahora puedes enviar tu solución en la pestaña "Mi Participación".');
+      showToast('success', '¡Te has registrado exitosamente! Ahora puedes enviar tu solución en la pestaña "Mi Participación".');
       await checkParticipation();
       await loadChallenge();
     }
@@ -223,7 +234,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     if (!user || !challenge) return;
 
     if (!submissionUrl || !submissionDescription) {
-      alert('Por favor completa todos los campos');
+      showToast('error', 'Por favor completa todos los campos');
       return;
     }
 
@@ -240,9 +251,9 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
 
     if (error) {
       console.error('Error submitting:', error);
-      alert('Error al enviar la solución');
+      showToast('error', 'Error al enviar la solución');
     } else {
-      alert('¡Solución enviada exitosamente!');
+      showToast('success', '¡Solución enviada exitosamente!');
       checkParticipation();
       loadChallenge();
     }
@@ -630,6 +641,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
           </div>
         </div>
       </div>
+      <ToastContainer toasts={toasts} onClose={(id) => setToasts(prev => prev.filter(t => t.id !== id))} />
     </div>
   );
 }
