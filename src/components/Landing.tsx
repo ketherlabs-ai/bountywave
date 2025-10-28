@@ -198,22 +198,28 @@ export function Landing({ onNavigate }: LandingProps) {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto mb-20">
-            <div className="text-center p-6 bg-gradient-to-br from-accent-500/10 to-emerald-500/10 rounded-2xl border border-accent-500/20 backdrop-blur-sm">
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-accent-400 to-emerald-400 bg-clip-text text-transparent mb-2">
-                ${animatedStats.rewards.toLocaleString()}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto mb-20">
+            <div className="text-center p-8 bg-gradient-to-br from-accent-500/10 to-emerald-500/10 rounded-2xl border border-accent-500/20 backdrop-blur-sm">
+              <div className="min-h-[80px] flex items-center justify-center mb-3">
+                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-accent-400 to-emerald-400 bg-clip-text text-transparent whitespace-nowrap overflow-visible">
+                  ${animatedStats.rewards.toLocaleString()}
+                </div>
               </div>
               <div className="text-sm text-neutral-400 font-medium">Pagados en Recompensas</div>
             </div>
-            <div className="text-center p-6 bg-gradient-to-br from-primary-500/10 to-purple-500/10 rounded-2xl border border-primary-500/20 backdrop-blur-sm">
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                {animatedStats.bounties}+
+            <div className="text-center p-8 bg-gradient-to-br from-primary-500/10 to-purple-500/10 rounded-2xl border border-primary-500/20 backdrop-blur-sm">
+              <div className="min-h-[80px] flex items-center justify-center mb-3">
+                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-400 to-purple-400 bg-clip-text text-transparent whitespace-nowrap overflow-visible">
+                  {animatedStats.bounties}+
+                </div>
               </div>
               <div className="text-sm text-neutral-400 font-medium">Retos Resueltos</div>
             </div>
-            <div className="text-center p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20 backdrop-blur-sm">
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                {animatedStats.countries}
+            <div className="text-center p-8 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20 backdrop-blur-sm">
+              <div className="min-h-[80px] flex items-center justify-center mb-3">
+                <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent whitespace-nowrap overflow-visible">
+                  {animatedStats.countries}
+                </div>
               </div>
               <div className="text-sm text-neutral-400 font-medium">Países Activos</div>
             </div>
