@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './AuthContext';
+import { ToastContainer, ToastProps } from '../components/Toast';
 
 export interface Notification {
   id: string;
@@ -22,6 +23,7 @@ interface NotificationsContextType {
   markAllAsRead: () => Promise<void>;
   deleteNotification: (id: string) => Promise<void>;
   refreshNotifications: () => Promise<void>;
+  showToast: (toast: Omit<ToastProps, 'id' | 'onClose'>) => void;
 }
 
 const NotificationsContext = createContext<NotificationsContextType | undefined>(undefined);
@@ -31,6 +33,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [toasts, setToasts] = useState<ToastProps[]>([]);
 
   const loadNotifications = useCallback(async () => {
     if (!userId) {
@@ -80,6 +83,17 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
           const newNotification = payload.new as Notification;
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
+
+          const toastType = newNotification.type === 'user_joined' ? 'user-joined' :
+                           newNotification.type === 'bounty_completed' ? 'success' :
+                           newNotification.type === 'achievement' ? 'achievement' : 'info';
+
+          showToast({
+            type: toastType as any,
+            message: newNotification.message,
+            username: newNotification.data?.username,
+            duration: 5000
+          });
 
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification(newNotification.title, {
@@ -181,6 +195,18 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
     await loadNotifications();
   };
 
+  const showToast = useCallback((toast: Omit<ToastProps, 'id' | 'onClose'>) => {
+    const id = Math.random().toString(36).substring(7);
+    const newToast: ToastProps = {
+      ...toast,
+      id,
+      onClose: (toastId: string) => {
+        setToasts(prev => prev.filter(t => t.id !== toastId));
+      }
+    };
+    setToasts(prev => [...prev, newToast]);
+  }, []);
+
   return (
     <NotificationsContext.Provider
       value={{
@@ -190,10 +216,15 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
         markAsRead,
         markAllAsRead,
         deleteNotification,
-        refreshNotifications
+        refreshNotifications,
+        showToast
       }}
     >
       {children}
+      <ToastContainer
+        toasts={toasts}
+        onClose={(id) => setToasts(prev => prev.filter(t => t.id !== id))}
+      />
     </NotificationsContext.Provider>
   );
 }

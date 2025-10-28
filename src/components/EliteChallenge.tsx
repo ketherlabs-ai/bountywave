@@ -88,11 +88,15 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
 
   const loadChallenge = async () => {
     setLoading(true);
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('elite_challenges')
       .select('*')
       .eq('status', 'active')
-      .single();
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error loading challenge:', error);
+    }
 
     if (data) {
       setChallenge(data);
@@ -101,11 +105,15 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   };
 
   const loadTechDetails = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('elite_challenge_tech_details')
       .select('*')
       .limit(1)
-      .single();
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error loading tech details:', error);
+    }
 
     if (data) {
       setTechDetails(data);
