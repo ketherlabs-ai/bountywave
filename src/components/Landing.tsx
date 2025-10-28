@@ -127,7 +127,7 @@ export function Landing({ onNavigate }: LandingProps) {
               BOUNTYWAVE conecta talento global con desafíos reales. Recompensas instantáneas, votación privada y comunidad descentralizada.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <button
                 onClick={() => onNavigate('explorer')}
                 className="group px-8 py-4 bg-gradient-to-r from-accent-500 to-primary-500 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:shadow-2xl hover:shadow-accent-500/50 transition-all hover:scale-105"
@@ -140,6 +140,17 @@ export function Landing({ onNavigate }: LandingProps) {
                 className="px-8 py-4 bg-white/5 backdrop-blur-sm text-white rounded-xl font-bold text-lg border border-white/10 hover:bg-white/10 hover:border-accent-500/50 transition-all"
               >
                 Publicar Reto
+              </button>
+            </div>
+
+            <div className="mb-16">
+              <button
+                onClick={() => onNavigate('features')}
+                className="group px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-base flex items-center justify-center gap-2 mx-auto hover:shadow-2xl hover:shadow-purple-500/50 transition-all hover:scale-105 animate-bounce-slow"
+              >
+                <Sparkles size={18} className="animate-pulse" />
+                Ver 8 Funcionalidades Avanzadas
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
 

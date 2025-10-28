@@ -16,6 +16,7 @@ export function Navbar({ onNavigate, currentView }: NavbarProps) {
     { id: 'home', label: 'Inicio' },
     { id: 'explorer', label: 'Explorar' },
     { id: 'create', label: 'Publicar' },
+    { id: 'features', label: '✨ Features' },
     { id: 'leaderboard', label: 'Ranking' },
     { id: 'wallet', label: 'Wallet' },
   ];

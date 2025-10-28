@@ -12,6 +12,7 @@ import { WalletConnectModal } from './components/WalletConnectModal';
 import { NotificationPermissionBanner } from './components/NotificationsPanel';
 import { UserProfile } from './components/UserProfile';
 import { HallOfFame } from './components/HallOfFame';
+import FeaturesShowcase from './components/FeaturesShowcase';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState('home');
@@ -42,6 +43,8 @@ function AppContent() {
         return <UserProfile profileId={viewData?.profileId} onNavigate={handleNavigate} />;
       case 'hall-of-fame':
         return <HallOfFame onNavigate={handleNavigate} />;
+      case 'features':
+        return <FeaturesShowcase />;
       default:
         return <Landing onNavigate={handleNavigate} />;
     }
