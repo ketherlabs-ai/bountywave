@@ -428,19 +428,77 @@ export function Leaderboard({ onNavigate }: LeaderboardProps) {
                 onClick={() => onNavigate('profile', { profileId: entry.id })}
                 className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-primary-500/50 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-300 cursor-pointer"
               >
-                <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-hidden">
-                  <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br ${badge.gradient} rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold shrink-0 text-sm sm:text-base`}>
+                {/* Mobile Layout */}
+                <div className="lg:hidden">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className={`w-12 h-12 bg-gradient-to-br ${badge.gradient} rounded-lg flex items-center justify-center text-white font-bold shrink-0 text-sm`}>
+                      {actualIndex < 10 ? badge.icon : actualIndex + 1}
+                    </div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center text-white text-lg font-bold shrink-0">
+                      {entry.username[0].toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-base font-bold text-white truncate">{entry.username}</h3>
+                        <span className="px-2 py-0.5 bg-primary-500/20 text-primary-400 text-xs font-bold rounded whitespace-nowrap">
+                          Nivel {entry.level}
+                        </span>
+                      </div>
+                      {entry.position_change !== undefined && entry.position_change !== 0 && (
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold ${
+                          entry.position_change > 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                        }`}>
+                          {entry.position_change > 0 ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
+                          {Math.abs(entry.position_change)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 mb-3">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-accent-400">{entry.total_rewards_earned.toFixed(2)}</div>
+                      <div className="text-xs text-neutral-500">ETH</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-white">{entry.total_bounties_won}</div>
+                      <div className="text-xs text-neutral-500">Victorias</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-primary-400">{entry.ranking_score}</div>
+                      <div className="text-xs text-neutral-500">Puntos</div>
+                    </div>
+                  </div>
+
+                  {entry.badges.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {entry.badges.map((badgeName, i) => (
+                        <span
+                          key={i}
+                          className={`px-2 py-1 bg-gradient-to-r ${getBadgeColor(badgeName)} rounded text-white text-xs font-semibold flex items-center gap-1`}
+                        >
+                          <span>{getBadgeIcon(badgeName)}</span>
+                          {badgeName}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden lg:flex items-center gap-6">
+                  <div className={`w-14 h-14 bg-gradient-to-br ${badge.gradient} rounded-xl flex items-center justify-center text-white font-bold shrink-0`}>
                     {actualIndex < 10 ? badge.icon : actualIndex + 1}
                   </div>
 
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-base sm:text-lg md:text-xl font-bold shrink-0">
+                  <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center text-white text-xl font-bold shrink-0">
                     {entry.username[0].toUpperCase()}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 sm:gap-3 mb-1 flex-wrap">
-                      <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white truncate">{entry.username}</h3>
-                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-primary-500/20 text-primary-400 text-[10px] sm:text-xs font-bold rounded whitespace-nowrap">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-xl font-bold text-white truncate">{entry.username}</h3>
+                      <span className="px-2 py-1 bg-primary-500/20 text-primary-400 text-xs font-bold rounded whitespace-nowrap">
                         Nivel {entry.level}
                       </span>
                       {entry.position_change !== undefined && entry.position_change !== 0 && (
