@@ -13,6 +13,7 @@ import { NotificationPermissionBanner } from './components/NotificationsPanel';
 import { UserProfile } from './components/UserProfile';
 import { HallOfFame } from './components/HallOfFame';
 import FeaturesShowcase from './components/FeaturesShowcase';
+import { EliteChallenge } from './components/EliteChallenge';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState('home');
@@ -45,6 +46,8 @@ function AppContent() {
         return <HallOfFame onNavigate={handleNavigate} />;
       case 'features':
         return <FeaturesShowcase />;
+      case 'elite-challenge':
+        return <EliteChallenge onNavigate={handleNavigate} challengeId={viewData?.challengeId} />;
       default:
         return <Landing onNavigate={handleNavigate} />;
     }

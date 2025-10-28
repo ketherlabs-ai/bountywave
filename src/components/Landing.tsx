@@ -407,7 +407,7 @@ export function Landing({ onNavigate }: LandingProps) {
 
                 <div className="flex flex-col md:flex-row gap-4">
                   <button
-                    onClick={() => onNavigate('explorer')}
+                    onClick={() => onNavigate('elite-challenge')}
                     className="flex-1 px-8 py-5 bg-gradient-to-r from-primary-600 via-primary-500 to-accent-500 text-white rounded-xl font-black text-lg hover:from-primary-500 hover:via-primary-400 hover:to-accent-400 transition-all hover:scale-105 shadow-lg shadow-primary-500/50 flex items-center justify-center gap-3 group"
                   >
                     <Rocket className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
@@ -415,7 +415,7 @@ export function Landing({ onNavigate }: LandingProps) {
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                   </button>
                   <button
-                    onClick={() => onNavigate('explorer')}
+                    onClick={() => onNavigate('elite-challenge')}
                     className="px-8 py-5 bg-neutral-900/50 text-white rounded-xl font-bold text-lg hover:bg-neutral-900/80 transition-all border border-neutral-700 hover:border-neutral-600 flex items-center justify-center gap-2"
                   >
                     <Code className="w-5 h-5" />
