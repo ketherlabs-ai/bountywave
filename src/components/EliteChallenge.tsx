@@ -88,35 +88,54 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
 
   const loadChallenge = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('elite_challenges')
-      .select('*')
-      .eq('status', 'active')
-      .maybeSingle();
+    try {
+      const { data, error } = await supabase
+        .from('elite_challenges')
+        .select('*')
+        .eq('status', 'active')
+        .limit(1);
 
-    if (error) {
-      console.error('Error loading challenge:', error);
-    }
+      if (error) {
+        console.error('Error loading challenge:', error);
+        setLoading(false);
+        return;
+      }
 
-    if (data) {
-      setChallenge(data);
+      console.log('Challenge data loaded:', data);
+
+      if (data && data.length > 0) {
+        setChallenge(data[0]);
+      } else {
+        console.warn('No active challenges found');
+      }
+    } catch (err) {
+      console.error('Exception loading challenge:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const loadTechDetails = async () => {
-    const { data, error } = await supabase
-      .from('elite_challenge_tech_details')
-      .select('*')
-      .limit(1)
-      .maybeSingle();
+    try {
+      const { data, error } = await supabase
+        .from('elite_challenge_tech_details')
+        .select('*')
+        .limit(1);
 
-    if (error) {
-      console.error('Error loading tech details:', error);
-    }
+      if (error) {
+        console.error('Error loading tech details:', error);
+        return;
+      }
 
-    if (data) {
-      setTechDetails(data);
+      console.log('Tech details loaded:', data);
+
+      if (data && data.length > 0) {
+        setTechDetails(data[0]);
+      } else {
+        console.warn('No tech details found');
+      }
+    } catch (err) {
+      console.error('Exception loading tech details:', err);
     }
   };
 
@@ -229,10 +248,26 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     }
   };
 
-  if (loading || !challenge) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black via-neutral-950 to-black flex items-center justify-center">
         <div className="text-white text-xl">Cargando Elite Challenge...</div>
+      </div>
+    );
+  }
+
+  if (!challenge) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black via-neutral-950 to-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-white text-xl mb-4">No hay Elite Challenges activos en este momento</div>
+          <button
+            onClick={() => onNavigate('home')}
+            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-500 transition-colors"
+          >
+            Volver al Inicio
+          </button>
+        </div>
       </div>
     );
   }
