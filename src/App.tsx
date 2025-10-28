@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { NotificationsProvider } from './contexts/NotificationsContext';
 import { Navbar } from './components/Navbar';
@@ -12,27 +12,11 @@ import { WalletConnectModal } from './components/WalletConnectModal';
 import { NotificationPermissionBanner } from './components/NotificationsPanel';
 import { UserProfile } from './components/UserProfile';
 import { HallOfFame } from './components/HallOfFame';
-import SupabaseLogin from './components/SupabaseLogin';
-import { supabase } from './lib/supabase';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState('home');
   const [viewData, setViewData] = useState<any>(null);
   const { showWalletModal, setShowWalletModal, connectWallet } = useAuth();
-
-  // --- VERIFICACIÓN DE SESIÓN SUPABASE ---
-  const [isReady, setIsReady] = useState(false);
-  const [hasSession, setHasSession] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setHasSession(!!data.user);
-      setIsReady(true);
-    });
-  }, []);
-
-  if (!isReady) return <div>Cargando...</div>;
-  if (!hasSession) return <SupabaseLogin />; // Mostramos login antes de cualquier otra UI
 
   const handleNavigate = (view: string, data?: any) => {
     setCurrentView(view);
