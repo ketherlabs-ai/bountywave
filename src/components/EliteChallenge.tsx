@@ -49,10 +49,18 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
   const [isRegistered, setIsRegistered] = useState(false);
 
   useEffect(() => {
-    loadChallenge();
-    loadTechDetails();
-    checkParticipation();
+    const loadData = async () => {
+      await loadChallenge();
+      await loadTechDetails();
+    };
+    loadData();
   }, [challengeId]);
+
+  useEffect(() => {
+    if (challenge) {
+      checkParticipation();
+    }
+  }, [challenge]);
 
   useEffect(() => {
     if (challenge?.deadline) {
@@ -108,10 +116,13 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
+    if (!challenge) return;
+
     const { data } = await supabase
       .from('elite_challenge_participants')
       .select('*')
       .eq('user_id', user.id)
+      .eq('challenge_id', challenge.id)
       .maybeSingle();
 
     if (data) {
@@ -126,7 +137,32 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || !challenge) {
       alert('Debes iniciar sesión para participar');
+      onNavigate('home');
       return;
+    }
+
+    // Verificar si ya existe un perfil, si no, crearlo
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (!existingProfile) {
+      // Crear perfil si no existe
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          id: user.id,
+          username: user.email?.split('@')[0] || 'user',
+          wallet_address: null
+        });
+
+      if (profileError) {
+        console.error('Error creating profile:', profileError);
+        alert('Error al crear perfil. Por favor intenta de nuevo.');
+        return;
+      }
     }
 
     const { error } = await supabase
@@ -139,11 +175,19 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
 
     if (error) {
       console.error('Error registering:', error);
-      alert('Error al registrarse. Es posible que ya estés registrado.');
+      if (error.code === '23505') {
+        alert('Ya estás registrado en este challenge.');
+        setIsRegistered(true);
+        await checkParticipation();
+      } else {
+        alert('Error al registrarse: ' + error.message);
+      }
     } else {
       setIsRegistered(true);
-      alert('¡Te has registrado exitosamente!');
-      loadChallenge();
+      setActiveTab('overview');
+      alert('¡Te has registrado exitosamente! Ahora puedes enviar tu solución en la pestaña "Mi Participación".');
+      await checkParticipation();
+      await loadChallenge();
     }
   };
 
@@ -189,7 +233,7 @@ export function EliteChallenge({ onNavigate, challengeId }: EliteChallengeProps)
     <div className="min-h-screen bg-gradient-to-b from-black via-neutral-950 to-black text-white">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <button
-          onClick={() => onNavigate('landing')}
+          onClick={() => onNavigate('home')}
           className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors mb-8"
         >
           <ArrowLeft size={20} />
