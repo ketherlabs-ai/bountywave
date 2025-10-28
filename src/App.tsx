@@ -20,7 +20,7 @@ function AppContent() {
   const [viewData, setViewData] = useState<any>(null);
   const { showWalletModal, setShowWalletModal, connectWallet } = useAuth();
 
-  // --- VERIFICAR SESIÓN SUPABASE ---
+  // --- VERIFICACIÓN DE SESIÓN SUPABASE ---
   const [isReady, setIsReady] = useState(false);
   const [hasSession, setHasSession] = useState(false);
 
@@ -32,6 +32,7 @@ function AppContent() {
   }, []);
 
   if (!isReady) return <div>Cargando...</div>;
+  if (!hasSession) return <SupabaseLogin />; // Mostramos login antes de cualquier otra UI
 
   const handleNavigate = (view: string, data?: any) => {
     setCurrentView(view);
@@ -68,26 +69,6 @@ function AppContent() {
         <Navbar onNavigate={handleNavigate} currentView={currentView} />
         {renderView()}
       </div>
-
-      {/* Aquí agregas el panel flotante de login si NO hay sesión */}
-      {!hasSession && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            right: 0,
-            width: 360,
-            height: '100vh',
-            background: 'rgba(32,32,32,0.95)',
-            padding: '32px 24px',
-            zIndex: 1000,
-            boxShadow: '0 0 32px #222'
-          }}
-        >
-          <SupabaseLogin />
-        </div>
-      )}
-
       <WalletConnectModal
         isOpen={showWalletModal}
         onClose={() => setShowWalletModal(false)}
