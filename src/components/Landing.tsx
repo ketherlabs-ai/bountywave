@@ -1,6 +1,11 @@
 import { ArrowRight, Trophy, Users, Zap, Check, Globe, Sparkles, Code, Wallet, Shield, TrendingUp, Star, Lock, ExternalLink, FileCode } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import SupabaseLogin from './components/SupabaseLogin';
+//...
+
+<SupabaseLogin />
+
 
 interface LandingProps {
   onNavigate: (view: string) => void;
