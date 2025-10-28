@@ -12,30 +12,14 @@ interface Stats {
   totalSubmissions: number;
 }
 
-interface LiveActivity {
-  id: string;
-  type: 'bounty_solved' | 'new_bounty' | 'user_joined';
-  user: string;
-  amount?: number;
-  title?: string;
-  country?: string;
-}
-
 export function Landing({ onNavigate }: LandingProps) {
   const [stats, setStats] = useState<Stats>({ activeBounties: 0, totalRewards: 0, totalSubmissions: 0 });
   const [animatedStats, setAnimatedStats] = useState({ rewards: 0, bounties: 0, countries: 0 });
-  const [liveActivities, setLiveActivities] = useState<LiveActivity[]>([]);
-  const [currentActivityIndex, setCurrentActivityIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState({ hours: 23, minutes: 45, seconds: 30 });
   const [userLevel, setUserLevel] = useState({ level: 5, xp: 2450, nextLevelXp: 3000, streak: 7 });
 
   useEffect(() => {
     loadStats();
-    generateLiveActivities();
-
-    const activityInterval = setInterval(() => {
-      setCurrentActivityIndex(prev => (prev + 1) % 5);
-    }, 4000);
 
     const countdownInterval = setInterval(() => {
       setTimeRemaining(prev => {
@@ -61,7 +45,6 @@ export function Landing({ onNavigate }: LandingProps) {
     }, 1000);
 
     return () => {
-      clearInterval(activityInterval);
       clearInterval(countdownInterval);
     };
   }, []);
@@ -103,38 +86,6 @@ export function Landing({ onNavigate }: LandingProps) {
     });
   };
 
-  const generateLiveActivities = () => {
-    const activities: LiveActivity[] = [
-      { id: '1', type: 'bounty_solved', user: 'Juan Pérez', amount: 150, country: 'México' },
-      { id: '2', type: 'new_bounty', user: 'OpenAI', title: 'Desarrollar plugin ChatGPT', amount: 500 },
-      { id: '3', type: 'bounty_solved', user: 'Maria Silva', amount: 220, country: 'Brasil' },
-      { id: '4', type: 'user_joined', user: 'Alex Chen', country: 'Singapur' },
-      { id: '5', type: 'new_bounty', user: 'Uniswap', title: 'Auditoría Smart Contract', amount: 800 }
-    ];
-    setLiveActivities(activities);
-  };
-
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'bounty_solved': return '🎯';
-      case 'new_bounty': return '🔥';
-      case 'user_joined': return '👋';
-      default: return '⚡';
-    }
-  };
-
-  const getActivityText = (activity: LiveActivity) => {
-    switch (activity.type) {
-      case 'bounty_solved':
-        return `${activity.user} resolvió un bounty y ganó $${activity.amount} USDC`;
-      case 'new_bounty':
-        return `Nuevo reto publicado por ${activity.user}: "${activity.title}"`;
-      case 'user_joined':
-        return `${activity.user} se unió desde ${activity.country}`;
-      default:
-        return '';
-    }
-  };
 
   const featuredBounties = [
     {
@@ -165,21 +116,6 @@ export function Landing({ onNavigate }: LandingProps) {
 
   return (
     <div className="min-h-screen bg-neutral-950 overflow-hidden">
-      <div className="fixed top-24 right-4 z-40 space-y-3 max-w-sm">
-        {liveActivities.length > 0 && (
-          <div className="bg-gradient-to-r from-emerald-900/90 to-green-900/90 backdrop-blur-xl rounded-xl p-4 border border-emerald-500/30 shadow-2xl animate-slide-in-right">
-            <div className="flex items-start gap-3">
-              <div className="text-2xl">{getActivityIcon(liveActivities[currentActivityIndex].type)}</div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-white font-medium leading-relaxed">
-                  {getActivityText(liveActivities[currentActivityIndex])}
-                </p>
-                <p className="text-xs text-emerald-300 mt-1">Hace 2 minutos</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
 
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-b from-accent-500/10 via-transparent to-transparent"></div>
