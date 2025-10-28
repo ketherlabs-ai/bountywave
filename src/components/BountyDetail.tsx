@@ -258,9 +258,9 @@ export function BountyDetail({ bountyId, onNavigate }: BountyDetailProps) {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-5 sm:p-8">
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <span className="px-3 py-1.5 bg-primary-500/20 text-primary-400 text-sm font-semibold rounded-lg">
                   {bounty.category_name}
@@ -331,11 +331,11 @@ export function BountyDetail({ bountyId, onNavigate }: BountyDetailProps) {
                     rows={6}
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 resize-none"
                   />
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-3">
                     <button
                       onClick={handleSubmit}
                       disabled={submitting}
-                      className="flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50"
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50"
                     >
                       <Send size={18} />
                       {submitting ? 'Enviando...' : 'Enviar Solución'}

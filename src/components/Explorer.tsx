@@ -388,12 +388,12 @@ export function Explorer({ onNavigate }: ExplorerProps) {
                     {regularBounties.length}
                   </span>
                 </div>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {regularBounties.map((bounty) => (
                     <div
                       key={bounty.id}
                       onClick={() => onNavigate('bounty', { bountyId: bounty.id })}
-                      className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-primary-500/50 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                      className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-5 hover:bg-white/10 hover:border-primary-500/50 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <span className="px-2.5 py-1 bg-primary-500/10 text-primary-400 text-xs font-semibold rounded-lg">

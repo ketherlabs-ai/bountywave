@@ -125,7 +125,7 @@ export function WalletConnectModal({ isOpen, onClose, onConnect }: WalletConnect
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-3 mb-6">
+          <div className="grid sm:grid-cols-2 gap-3 mb-6">
             {walletOptions.map((wallet) => (
               <button
                 key={wallet.id}

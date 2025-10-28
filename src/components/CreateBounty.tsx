@@ -160,7 +160,7 @@ export function CreateBounty({ onNavigate }: CreateBountyProps) {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
                     <DollarSign size={16} />

@@ -266,7 +266,7 @@ export function UserProfile({ profileId, onNavigate }: UserProfileProps) {
             </div>
 
             {stats && (
-              <div className="grid md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-all">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-10 h-10 bg-primary-500/20 rounded-xl flex items-center justify-center">
@@ -326,7 +326,7 @@ export function UserProfile({ profileId, onNavigate }: UserProfileProps) {
                     {achievements.length}
                   </span>
                 </h2>
-                <div className="grid md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                   {achievements.map((achievement) => {
                     const { icon, rarity } = getAchievementIcon(achievement.type);
                     return (

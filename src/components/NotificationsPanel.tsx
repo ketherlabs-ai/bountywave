@@ -83,7 +83,7 @@ export function NotificationsPanel() {
             className="fixed inset-0 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-12 w-96 max-h-[600px] bg-neutral-900 border border-white/10 rounded-xl shadow-glow z-50 overflow-hidden">
+          <div className="fixed sm:absolute right-0 sm:right-0 top-0 sm:top-12 left-0 sm:left-auto w-full sm:w-96 max-h-screen sm:max-h-[600px] bg-neutral-900 border-0 sm:border border-white/10 sm:rounded-xl shadow-glow z-50 overflow-hidden">
             <div className="sticky top-0 bg-neutral-900 border-b border-white/10 p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Bell size={18} className="text-accent-400" />
