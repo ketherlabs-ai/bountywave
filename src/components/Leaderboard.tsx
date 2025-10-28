@@ -237,16 +237,16 @@ export function Leaderboard({ onNavigate }: LeaderboardProps) {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-1 h-12 bg-gradient-to-b from-accent-400 to-primary-400 rounded-full" />
-            <h1 className="text-5xl md:text-6xl font-display font-bold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white tracking-tight">
               Ranking Global
             </h1>
           </div>
-          <p className="text-xl text-neutral-400 ml-7">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-400 ml-7">
             Los mejores solucionadores y creadores de la plataforma
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-8 sm:mb-12">
           <div className="bg-gradient-to-br from-accent-500/20 to-accent-600/20 backdrop-blur-xl border border-accent-500/30 rounded-3xl p-8 text-center">
             <Trophy className="text-accent-400 mx-auto mb-3" size={48} />
             <div className="text-sm text-neutral-300 mb-2">Total Ganadores</div>
@@ -356,19 +356,19 @@ export function Leaderboard({ onNavigate }: LeaderboardProps) {
               <Crown className="text-yellow-400" size={28} />
               Hall of Fame
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {leaderboard.slice(0, 3).map((entry, index) => {
                 const badge = getRankBadge(index);
                 return (
                   <div
                     key={entry.id}
                     onClick={() => onNavigate('profile', { profileId: entry.id })}
-                    className={`group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 ${badge.border} rounded-3xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 ${badge.glow} hover:shadow-2xl overflow-hidden`}
+                    className={`group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border-2 ${badge.border} rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 cursor-pointer transition-all duration-300 hover:scale-105 ${badge.glow} hover:shadow-2xl overflow-hidden`}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${badge.gradient} opacity-5 group-hover:opacity-10 transition-opacity`} />
 
                     <div className="relative z-10">
-                      <div className={`w-20 h-20 mx-auto mb-4 bg-gradient-to-br ${badge.gradient} rounded-2xl flex items-center justify-center text-white transform group-hover:scale-110 transition-transform`}>
+                      <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto mb-3 sm:mb-4 bg-gradient-to-br ${badge.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center text-white transform group-hover:scale-110 transition-transform`}>
                         {badge.icon}
                       </div>
 
@@ -376,22 +376,22 @@ export function Leaderboard({ onNavigate }: LeaderboardProps) {
                         <div className={`inline-block px-3 py-1 bg-gradient-to-r ${badge.gradient} rounded-lg text-white font-bold text-sm mb-2`}>
                           {badge.label} Lugar
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-1">{entry.username}</h3>
-                        <p className="text-xs text-neutral-500 font-mono">
+                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 truncate px-2">{entry.username}</h3>
+                        <p className="text-[10px] sm:text-xs text-neutral-500 font-mono truncate px-2">
                           {entry.wallet_address.slice(0, 6)}...{entry.wallet_address.slice(-4)}
                         </p>
                       </div>
 
-                      <div className="space-y-3 mb-4">
-                        <div className="flex items-center justify-between text-sm">
+                      <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
+                        <div className="flex items-center justify-between text-xs sm:text-sm">
                           <span className="text-neutral-400">Premios</span>
                           <span className="text-accent-400 font-bold">{entry.total_rewards_earned.toFixed(2)} ETH</span>
                         </div>
-                        <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center justify-between text-xs sm:text-sm">
                           <span className="text-neutral-400">Victorias</span>
                           <span className="text-white font-bold">{entry.total_bounties_won}</span>
                         </div>
-                        <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center justify-between text-xs sm:text-sm">
                           <span className="text-neutral-400">Nivel</span>
                           <span className="text-primary-400 font-bold">{entry.level}</span>
                         </div>
@@ -426,21 +426,21 @@ export function Leaderboard({ onNavigate }: LeaderboardProps) {
               <div
                 key={entry.id}
                 onClick={() => onNavigate('profile', { profileId: entry.id })}
-                className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-primary-500/50 rounded-2xl p-5 transition-all duration-300 cursor-pointer"
+                className="group bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-primary-500/50 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 transition-all duration-300 cursor-pointer"
               >
-                <div className="flex items-center gap-6">
-                  <div className={`w-14 h-14 bg-gradient-to-br ${badge.gradient} rounded-xl flex items-center justify-center text-white font-bold shrink-0`}>
+                <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-hidden">
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br ${badge.gradient} rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold shrink-0 text-sm sm:text-base`}>
                     {actualIndex < 10 ? badge.icon : actualIndex + 1}
                   </div>
 
-                  <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center text-white text-xl font-bold shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg sm:rounded-xl flex items-center justify-center text-white text-base sm:text-lg md:text-xl font-bold shrink-0">
                     {entry.username[0].toUpperCase()}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-xl font-bold text-white truncate">{entry.username}</h3>
-                      <span className="px-2 py-1 bg-primary-500/20 text-primary-400 text-xs font-bold rounded-lg">
+                    <div className="flex items-center gap-2 sm:gap-3 mb-1 flex-wrap">
+                      <h3 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white truncate">{entry.username}</h3>
+                      <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-primary-500/20 text-primary-400 text-[10px] sm:text-xs font-bold rounded whitespace-nowrap">
                         Nivel {entry.level}
                       </span>
                       {entry.position_change !== undefined && entry.position_change !== 0 && (

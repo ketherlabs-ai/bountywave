@@ -123,10 +123,10 @@ export default function FeaturesShowcase() {
             <Sparkles className="w-5 h-5 text-purple-400" />
             <span className="text-purple-400 font-semibold">Funcionalidades Avanzadas</span>
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 px-4">
             8 Funcionalidades Disruptivas
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-3xl mx-auto px-4">
             Explora todas las características innovadoras implementadas en BountyWave MVP
           </p>
         </div>

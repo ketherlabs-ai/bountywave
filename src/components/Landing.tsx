@@ -719,18 +719,18 @@ export function Landing({ onNavigate }: LandingProps) {
                   </button>
                 </div>
 
-                <div className="mt-12 flex items-center justify-center gap-8 text-neutral-500 text-sm">
+                <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 md:gap-8 text-neutral-500 text-xs sm:text-sm">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500" />
-                    <span>Sin comisiones ocultas</span>
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" />
+                    <span className="whitespace-nowrap">Sin comisiones ocultas</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500" />
-                    <span>100% transparente</span>
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" />
+                    <span className="whitespace-nowrap">100% transparente</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500" />
-                    <span>Open source</span>
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 flex-shrink-0" />
+                    <span className="whitespace-nowrap">Open source</span>
                   </div>
                 </div>
               </div>
