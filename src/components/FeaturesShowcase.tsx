@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Sparkles, Camera, Trophy, Video, MapPin, Zap, Gift, BarChart3,
-  ChevronRight, X, CheckCircle
+  ChevronRight, X
 } from 'lucide-react';
 import ARVRBounty from './ARVRBounty';
 import DynamicNFTCard from './DynamicNFTCard';
@@ -204,44 +204,6 @@ export default function FeaturesShowcase() {
           </div>
         )}
 
-        <div className="mt-12 bg-gradient-to-r from-green-900/20 to-emerald-900/20 rounded-xl p-6 border border-green-500/30">
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <CheckCircle className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white mb-2">
-                Implementación Completa Verificada
-              </h3>
-              <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-300">
-                <div>
-                  <div className="font-semibold text-green-400 mb-1">Base de Datos</div>
-                  <ul className="space-y-1">
-                    <li>• 17 nuevas tablas</li>
-                    <li>• 31 políticas RLS</li>
-                    <li>• 2 triggers automáticos</li>
-                  </ul>
-                </div>
-                <div>
-                  <div className="font-semibold text-green-400 mb-1">Frontend</div>
-                  <ul className="space-y-1">
-                    <li>• 8 componentes React</li>
-                    <li>• TypeScript completo</li>
-                    <li>• Responsive design</li>
-                  </ul>
-                </div>
-                <div>
-                  <div className="font-semibold text-green-400 mb-1">Seguridad</div>
-                  <ul className="space-y-1">
-                    <li>• RLS en todas las tablas</li>
-                    <li>• Auth integrada</li>
-                    <li>• Queries optimizadas</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
