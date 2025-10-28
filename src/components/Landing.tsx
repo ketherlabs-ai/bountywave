@@ -12,14 +12,27 @@ interface Stats {
   totalSubmissions: number;
 }
 
+interface LiveActivity {
+  id: string;
+  type: 'bounty_solved' | 'new_bounty' | 'user_joined';
+  user: string;
+  amount?: number;
+  title?: string;
+  country?: string;
+}
+
 export function Landing({ onNavigate }: LandingProps) {
   const [stats, setStats] = useState<Stats>({ activeBounties: 0, totalRewards: 0, totalSubmissions: 0 });
   const [animatedStats, setAnimatedStats] = useState({ rewards: 0, bounties: 0, countries: 0 });
+  const [liveActivities, setLiveActivities] = useState<LiveActivity[]>([]);
+  const [currentActivity, setCurrentActivity] = useState<LiveActivity | null>(null);
+  const [showActivity, setShowActivity] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState({ hours: 23, minutes: 45, seconds: 30 });
   const [userLevel, setUserLevel] = useState({ level: 5, xp: 2450, nextLevelXp: 3000, streak: 7 });
 
   useEffect(() => {
     loadStats();
+    generateLiveActivities();
 
     const countdownInterval = setInterval(() => {
       setTimeRemaining(prev => {
@@ -86,6 +99,76 @@ export function Landing({ onNavigate }: LandingProps) {
     });
   };
 
+  const generateLiveActivities = () => {
+    const activities: LiveActivity[] = [
+      { id: '1', type: 'bounty_solved', user: 'Juan Pérez', amount: 150, country: 'México' },
+      { id: '2', type: 'new_bounty', user: 'OpenAI', title: 'Desarrollar plugin ChatGPT', amount: 500 },
+      { id: '3', type: 'bounty_solved', user: 'Maria Silva', amount: 220, country: 'Brasil' },
+      { id: '4', type: 'user_joined', user: 'Alex Chen', country: 'Singapur' },
+      { id: '5', type: 'new_bounty', user: 'Uniswap', title: 'Auditoría Smart Contract', amount: 800 },
+      { id: '6', type: 'user_joined', user: 'Sofia Rodriguez', country: 'España' },
+      { id: '7', type: 'bounty_solved', user: 'Takeshi Yamamoto', amount: 320, country: 'Japón' }
+    ];
+    setLiveActivities(activities);
+  };
+
+  useEffect(() => {
+    if (liveActivities.length === 0) return;
+
+    let currentIndex = 0;
+
+    const showNextActivity = () => {
+      setCurrentActivity(liveActivities[currentIndex]);
+      setShowActivity(true);
+
+      setTimeout(() => {
+        setShowActivity(false);
+      }, 4000);
+
+      currentIndex = (currentIndex + 1) % liveActivities.length;
+    };
+
+    showNextActivity();
+    const activityInterval = setInterval(showNextActivity, 6000);
+
+    return () => clearInterval(activityInterval);
+  }, [liveActivities]);
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'bounty_solved': return '🎯';
+      case 'new_bounty': return '🔥';
+      case 'user_joined': return '👋';
+      default: return '⚡';
+    }
+  };
+
+  const getActivityText = (activity: LiveActivity) => {
+    switch (activity.type) {
+      case 'bounty_solved':
+        return `${activity.user} resolvió un bounty y ganó $${activity.amount} USDC`;
+      case 'new_bounty':
+        return `Nuevo reto publicado por ${activity.user}: "${activity.title}"`;
+      case 'user_joined':
+        return `${activity.user} se unió desde ${activity.country}`;
+      default:
+        return '';
+    }
+  };
+
+  const getActivityColor = (type: string) => {
+    switch (type) {
+      case 'bounty_solved':
+        return 'from-green-500/20 to-emerald-500/20 border-green-500/30';
+      case 'new_bounty':
+        return 'from-accent-500/20 to-orange-500/20 border-accent-500/30';
+      case 'user_joined':
+        return 'from-blue-500/20 to-cyan-500/20 border-blue-500/30';
+      default:
+        return 'from-neutral-500/20 to-neutral-600/20 border-neutral-500/30';
+    }
+  };
+
 
   const featuredBounties = [
     {
@@ -116,6 +199,57 @@ export function Landing({ onNavigate }: LandingProps) {
 
   return (
     <div className="min-h-screen bg-neutral-950 overflow-hidden">
+      {/* Live Activity Toast - Bottom Right Corner */}
+      {currentActivity && (
+        <div
+          className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 max-w-[calc(100vw-2rem)] sm:max-w-sm transition-all duration-500 ease-out ${
+            showActivity
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-4 opacity-0 pointer-events-none'
+          }`}
+        >
+          <div className={`relative backdrop-blur-xl bg-gradient-to-br ${getActivityColor(currentActivity.type)} border rounded-2xl p-3.5 sm:p-4 shadow-2xl overflow-hidden`}>
+            {/* Glassmorphism overlay */}
+            <div className="absolute inset-0 bg-neutral-900/80 backdrop-blur-xl"></div>
+
+            {/* Content */}
+            <div className="relative flex items-start gap-2.5 sm:gap-3">
+              {/* Icon */}
+              <div className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center text-xl sm:text-2xl">
+                {getActivityIcon(currentActivity.type)}
+              </div>
+
+              {/* Text Content */}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs sm:text-sm text-white font-medium leading-relaxed line-clamp-2">
+                  {getActivityText(currentActivity)}
+                </p>
+                <p className="text-[10px] sm:text-xs text-white/60 mt-0.5 sm:mt-1 flex items-center gap-1">
+                  <Clock size={9} className="sm:hidden" />
+                  <Clock size={10} className="hidden sm:block" />
+                  Ahora mismo
+                </p>
+              </div>
+
+              {/* Close button */}
+              <button
+                onClick={() => setShowActivity(false)}
+                className="flex-shrink-0 w-6 h-6 rounded-lg hover:bg-white/10 transition-colors flex items-center justify-center text-white/60 hover:text-white text-lg"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
+              <div
+                className="h-full bg-gradient-to-r from-accent-400 to-accent-500"
+                style={{ animation: 'progress 4s linear' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-b from-accent-500/10 via-transparent to-transparent"></div>
