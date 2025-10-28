@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // ----- BLOQUE CORREGIDO para la creación del perfil -----
+      // Creación de perfil corregida para Supabase v2
       const { data: existingProfile } = await supabase
         .from('profiles')
         .select('id')
@@ -109,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (existingProfile) {
         profileId = existingProfile.id;
       } else {
-        const user = supabase.auth.user();
+        const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
           throw new Error('No hay sesión de usuario en Supabase. Debes iniciar sesión antes de crear un perfil.');
         }
@@ -117,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { error: insertError } = await supabase
           .from('profiles')
           .insert({
-            id: user.id, // <--- CORRECTO: UID de Supabase
+            id: user.id, // UID Supabase v2
             wallet_address: address,
             username: `User_${address.slice(0, 6)}`,
           });
@@ -128,7 +128,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         profileId = user.id;
       }
-      // ----- FIN del bloque corregido -----
 
       setWalletAddress(address);
       setUserId(profileId);
@@ -182,3 +181,4 @@ declare global {
     ethereum?: any;
   }
 }
+
