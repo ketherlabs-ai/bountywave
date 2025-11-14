@@ -6,6 +6,8 @@ https://bountywave-web3-chal-0wp9.bolt.host
 Contract
 0x444988008B5245B55E96fe27154Be9514d226479
 
+https://sepolia.scrollscan.com/address/0x444988008B5245B55E96fe27154Be9514d226479
+
 
 🎯 ¿Qué es BountyWave?
 BountyWave es una plataforma que conecta organizaciones que necesitan soluciones con talento global dispuesto a resolver retos por recompensas en crypto. Todo funciona de manera transparente, descentralizada y con pagos automáticos vía smart contracts.
